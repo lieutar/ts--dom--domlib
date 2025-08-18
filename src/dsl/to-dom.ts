@@ -1,7 +1,7 @@
 import { isAttrSpecType, isCommentSpecType, isTextNode, isCommentNode, isElementNode,
   type AttributeSpecType, type CommentSpecType, type ElementSpecType, type NodeSpecType,
-  type IWindow} from './types';
-import { newDocument, setAttributes } from './utils';
+  type IWindow} from '../types';
+import { newDocument, setAttributes } from '../utils';
 
 export function asDocument ( window: IWindow, src:ElementSpecType ): Document{
   const doc = newDocument(window);

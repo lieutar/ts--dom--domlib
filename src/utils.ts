@@ -10,6 +10,16 @@ export function setAttributes( elem: Element, attrs: AttributeSpecType ){
   }
 }
 
+export function mapSiblings<T>(src: Node|null, cb:(src:Node)=>T):T[]{
+  const result:T[] = [];
+  let node:Node|null = src;
+  while(node){
+    result.push(cb(node));
+    node = node.nextSibling;
+  }
+  return result;
+}
+
 export function clearChildren<T extends ContainerDOMNode>(src:T): T{
   const R = src.cloneNode() as T;
   while(R.firstChild) R.removeChild(R.firstChild);
@@ -52,9 +62,20 @@ export function xmldomFromString(window: IWindow, xmlString: string) : Document{
 export async function xmldomFromFile(window:IWindow, filePath: string) : Promise<Document>{
   return pipe( await nodeFs.readFile(filePath, 'utf-8'), src => xmldomFromString( window, src ) ); }
 
-export function newDocument(window: IWindow, documentElement?: Element){
-  const R = window.document.implementation.createDocument(null, null, null);
-  if(documentElement) R.appendChild(documentElement);
+export interface newDocumentOpt {
+        namespaceURI? : string | null;
+        qualifiedName?: string | null;
+        documentElement?: Element;
+        doctype?: DocumentType | null;
+};
+
+export function newDocument(window: IWindow, opt: Element | newDocumentOpt = {}){
+  const opt_ = ( isElementNode(opt)? {documentElement: opt} : opt ) as newDocumentOpt;
+  const R = window.document.implementation.createDocument(
+    opt_.namespaceURI ?? null,
+    opt_.qualifiedName ?? null,
+    opt_.doctype ?? null);
+  if(opt_.documentElement) R.appendChild(opt_.documentElement);
   return R;
 }
 

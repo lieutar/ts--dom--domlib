@@ -6,10 +6,13 @@ export type AttributeSpecType = { [attributeName: string]: string };
 export type ElementSpecType = [string, AttributeSpecType, ... NodeSpecType[]]
                             | [string,  ... NodeSpecType[]] | Element;
 export type ContainerDOMNode = Element | Document | DocumentFragment;
-
+export type SingleNode = Exclude<Node, DocumentFragment>;
 
 export function isNode(o:any) : o is Node {
   return o && (o.ownerDocument || o.nodeType === 9 ); }
+
+export function isSingleNode(o:any) : o is SingleNode {
+  return isNode(o) && !isDocumentFragmentNode(o); }
 
 export function isElementNode(o:any) : o is Element {
   return o && o.ownerDocument && o.nodeType === o.ownerDocument.ELEMENT_NODE; }
@@ -31,20 +34,16 @@ export function isCommentNode(o:any) : o is Comment {
 
 
 export function isTextSpecType ( o: any ) : o is TextSpecType {
-  return ( 'string' === typeof o || isTextNode(o) );
-}
+  return ( 'string' === typeof o || isTextNode(o) ); }
 
 export function isAttrSpecType ( o: any ) : o is AttributeSpecType {
-  return 'object' === typeof o && o.constructor === Object;
-}
+  return 'object' === typeof o && o.constructor === Object; }
 
 export function isCommentSpecType ( o: any ) : o is CommentSpecType {
-  return isCommentNode(o) || Array.isArray(o) && o[0] === '!--';
-}
+  return isCommentNode(o) || Array.isArray(o) && o[0] === '!--'; }
 
 export function isElementSpecType ( o: any ) : o is ElementSpecType {
-  return isElementNode(o) || Array.isArray(o) && o[0] !== '!--';
-}
+  return isElementNode(o) || Array.isArray(o) && o[0] !== '!--'; }
 
 export interface IWindow {
   DOMParser: typeof DOMParser;
