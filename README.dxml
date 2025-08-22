@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sec lang="ja">
+  <title>domlib</title>
+  Utilities for DOM manipulation.
+  <sec>
+    <title>domlib DSL</title>
+    ``` typescript
+    const element = asElement(['ruby', {class: 'kanji'}, '漢字', ['rt', 'かんじ']]);
+    // makes &lt;ruby class="kanji"&gt;漢字&lt;rt&gt;かんじ&lt;/rt&gt;&lt;/ruby&gt;
+    ```
+  </sec>
+</sec>
